@@ -16,9 +16,11 @@ tab2rows <- read.table("./data/ExData_Plotting1/household_power_consumption.txt"
 classes <- sapply(tab2rows, class)
 
 ## getting the classes of the data [END]
-EnergyDataIn<-read.table("./data/ExData_Plotting1/household_power_consumption.txt", header = T, sep =";", na.strings = "?", colClasses = classes, blank.lines.skip = FALSE) ##getting the data into an Initital data frame
-EnergyDataIn$Date<-as.Date(EnergyDataIn$Date,"%d/%m/%Y") ## converting the Date column into Date format
-EnergyData<-subset(EnergyDataIn, Date >= "2007-02-01"&Date <= "2007-02-02") ## subsetting only the dates necessairy
+
+EnergyData<-read.table(pipe('grep "^[1-2]/2/2007" "./data/ExData_Plotting1/household_power_consumption.txt"'), sep =";", na.strings = "?", colClasses = classes) ##getting the data into a data.frame with the necessary dates
+colnames(EnergyData) <-names(read.table('./data/ExData_Plotting1/household_power_consumption.txt', header=TRUE,sep=";",nrows=1)) ## assigning column names
+
+EnergyData$Date<-as.Date(EnergyData$Date,"%d/%m/%Y") ## converting the Date column into Date format
 EnergyData$DateTime<-paste(EnergyData$Date,EnergyData$Time) ##combining Date and Time into one column
 EnergyData$DateTime<-strptime(EnergyData$DateTime,"%Y-%m-%d %H:%M:%S") ## converting the DateTime column into Date and time format
 
